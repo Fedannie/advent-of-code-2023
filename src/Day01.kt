@@ -8,13 +8,7 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         return input.sumOf { str ->
-            val digits = numbers.keys.flatMap { number ->
-                listOf(
-                    str.indexOf(number) to numbers[number]!!,
-                    str.lastIndexOf(number) to numbers[number]!!
-                )
-            }.filter { it.first >= 0 }.sortedBy { it.first }.map { it.second }
-            digits.first() * 10 + digits.last()
+            numbers[str.findAnyOf(numbers.keys)?.second]!! * 10 + numbers[str.findLastAnyOf(numbers.keys)?.second]!!
         }
     }
 
