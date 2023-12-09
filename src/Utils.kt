@@ -27,3 +27,11 @@ fun gcd(x: Long, y: Long): Long {
 fun lcm(numbers: List<Long>): Long {
     return numbers.reduce { x, y -> x * (y / gcd(x, y)) }
 }
+
+fun readIntLists(input: List<String>, separator: String = " "): List<List<Int>> {
+    return input.map { it.split(separator).map { v -> v.toInt() } }
+}
+
+fun readIntList(input: String, separator: String = " "): List<Int> {
+    return input.split(separator).map { v -> v.toInt() }
+}
