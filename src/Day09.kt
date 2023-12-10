@@ -1,5 +1,3 @@
-import kotlin.math.abs
-
 fun main() {
     fun findDifferences(values: List<Int>): List<List<Int>> {
         val differences = mutableListOf(values)

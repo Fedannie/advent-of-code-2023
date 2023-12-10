@@ -35,3 +35,13 @@ fun readIntLists(input: List<String>, separator: String = " "): List<List<Int>> 
 fun readIntList(input: String, separator: String = " "): List<Int> {
     return input.split(separator).map { v -> v.toInt() }
 }
+
+data class Point(val x: Int, val y: Int)
+
+operator fun Point.unaryMinus() = Point(-x, -y)
+operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
+operator fun Point.minus(other: Point) = Point(x - other.x, y - other.y)
+
+operator fun List<String>.get(coordinates: Point): Char {
+    return this[coordinates.x][coordinates.y]
+}
