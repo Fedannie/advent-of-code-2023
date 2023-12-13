@@ -1,63 +1,75 @@
 fun main() {
-    val memory = mutableMapOf<Pair<Int, Int>, Long>()
-    fun fits(field: String, fieldInd: Int, damagedCnt: Int): Boolean {
-        for (i in fieldInd ..< fieldInd + damagedCnt) {
-            if (i == field.length || field[i] == '.') {
-                return false
+    fun reflectsX(f1: List<String>, f2: List<String>, differencesAllowed: Int = 0): Boolean {
+        if (f1.isEmpty() || f2.isEmpty()) {
+            return false
+        }
+        var differences = 0
+        for (i in f1.size - 1 downTo 0) {
+            if (f1.size - 1 - i >= f2.size) {
+                break
+            }
+            for (j in f1[0].indices) {
+                if (f1[i][j] != f2[f1.size - 1 - i][j]) {
+                    differences++
+                }
             }
         }
-        return fieldInd + damagedCnt == field.length || field[fieldInd + damagedCnt] != '#'
+        return differences == differencesAllowed
     }
 
-    fun countOptions(field: String, damaged: List<Int>, fieldInd: Int = 0, damagedInd: Int = 0): Long {
-        if (damagedInd >= damaged.size && fieldInd >= field.length) {
-            return 1
+    fun reflectsY(f1: List<String>, f2: List<String>, differencesAllowed: Int = 0): Boolean {
+        if (f1[0].isEmpty() || f2[0].isEmpty()) {
+            return false
         }
-        if (fieldInd >= field.length) {
-            return 0
-        }
-        if (damagedInd >= damaged.size) {
-            return if (field.subSequence(fieldInd, field.length).any { it == '#' }) 0 else 1
-        }
-        if (memory.contains(fieldInd to damagedInd)) {
-            return memory[fieldInd to damagedInd]!!
-        }
-        var result = 0L
-        if (field[fieldInd] != '#') {
-            result += countOptions(field, damaged, fieldInd + 1, damagedInd)
-        }
-        if (field[fieldInd] != '.') {
-            if (fits(field, fieldInd, damaged[damagedInd])) {
-                result += countOptions(field, damaged, fieldInd + damaged[damagedInd] + 1, damagedInd + 1)
+        var differences = 0
+        for (i in f1[0].length - 1 downTo 0) {
+            if (f1[0].length - 1 - i >= f2[0].length) {
+                break
+            }
+            for (j in f1.indices) {
+                if (f1.map { it[i] }[j] != f2.map { it[f1[0].length - 1 - i] }[j]) {
+                    differences++
+                }
             }
         }
-        memory[fieldInd to damagedInd] = result
-        return result
+        return differences == differencesAllowed
+    }
+
+    fun findHorizontalReflection(field: List<String>, differencesAllowed: Int = 0): Int {
+        for (i in field.indices) {
+            if (reflectsX(field.subList(0, i + 1), field.subList(i + 1, field.size), differencesAllowed)) {
+                return i + 1
+            }
+        }
+        return 0
+    }
+
+    fun findVerticalReflection(field: List<String>, differencesAllowed: Int = 0): Int {
+        for (i in field[0].indices) {
+            if (reflectsY(field.map { it.substring(0, i + 1) }, field.map { it.substring(i + 1) }, differencesAllowed)) {
+                return i + 1
+            }
+        }
+        return 0
     }
 
     fun part1(input: List<String>): Int {
-        return input.sumOf {
-            memory.clear()
-            countOptions(it.split(' ')[0], it.split(' ')[1].split(',').map { it.toInt() })
-        }.toInt()
-    }
-
-    fun String.repeat(times: Int, separator: String): String {
-        return Array(times) { this }.joinToString(separator)
-    }
-
-    fun part2(input: List<String>): Long {
-        return input.sumOf {
-            memory.clear()
-            countOptions(it.split(' ')[0].repeat(5, "?"), it.split(' ')[1].repeat(5, ",").split(',').map { it.toInt() })
+        return parseMultipleInputs(input).sumOf {
+            100 * findHorizontalReflection(it) + findVerticalReflection(it)
         }
     }
 
-    val testInput = readInput("Day12_test")
-    check(part1(testInput) == 21)
-    check(part2(testInput) == 525152L)
+    fun part2(input: List<String>): Int {
+        return parseMultipleInputs(input).sumOf {
+            100 * findHorizontalReflection(it, 1) + findVerticalReflection(it, 1)
+        }
+    }
 
-    val input = readInput("Day12")
+    val testInput = readInput("Day13_test")
+    check(part1(testInput) == 405)
+    check(part2(testInput) == 400)
+
+    val input = readInput("Day13")
     part1(input).println()
     part2(input).println()
 }

@@ -36,6 +36,19 @@ fun readIntList(input: String, separator: String = " "): List<Int> {
     return input.split(separator).map { v -> v.toInt() }
 }
 
+fun parseMultipleInputs(input: List<String>): List<List<String>> {
+    val result = mutableListOf<MutableList<String>>()
+    result.add(mutableListOf())
+    for (str in input) {
+        if (str.isBlank()) {
+            result.add(mutableListOf())
+        } else {
+            result.last().add(str)
+        }
+    }
+    return result.filter { it.isNotEmpty() }
+}
+
 data class Point(val x: Int, val y: Int)
 
 operator fun Point.unaryMinus() = Point(-x, -y)
