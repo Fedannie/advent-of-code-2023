@@ -58,3 +58,33 @@ operator fun Point.minus(other: Point) = Point(x - other.x, y - other.y)
 operator fun List<String>.get(coordinates: Point): Char {
     return this[coordinates.x][coordinates.y]
 }
+
+enum class Direction(val delta: Point) {
+    UP(Point(-1, 0)), LEFT(Point(0, -1)), DOWN(Point(1, 0)), RIGHT(Point(0, 1));
+    val vertical
+        get() = this == UP || this == DOWN
+
+    val horizontal
+        get() = !vertical
+
+    val opposite
+        get() = when (this) {
+            UP -> DOWN
+            LEFT -> RIGHT
+            RIGHT -> LEFT
+            DOWN -> UP
+        }
+}
+
+fun getDirection(p1: Point, p2: Point): Direction {
+    val diff = p1 - p2
+    return if (diff.x == -1) {
+        Direction.DOWN
+    } else if (diff.x == 1) {
+        Direction.UP
+    } else if (diff.y == -1) {
+        Direction.RIGHT
+    } else {
+        Direction.LEFT
+    }
+}

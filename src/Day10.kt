@@ -1,7 +1,7 @@
-enum class Direction(val delta: Point) {
-    UP(Point(-1, 0)), LEFT(Point(0, -1)), DOWN(Point(1, 0)), RIGHT(Point(0, 1));
+import Direction.*
 
-    fun fits(pipe: Char): Boolean {
+fun main() {
+    fun Direction.fits(pipe: Char): Boolean {
         return when (this) {
             UP -> pipe == '|' || pipe == '7' || pipe == 'F'
             LEFT -> pipe == 'F' || pipe == '-' || pipe == 'L'
@@ -10,27 +10,12 @@ enum class Direction(val delta: Point) {
         }
     }
 
-    fun next(pipe: Char): Direction {
+    fun Direction.next(pipe: Char): Direction {
         return when (this) {
             UP -> if (pipe == '7') LEFT else if (pipe == 'F') RIGHT else this
             LEFT -> if (pipe == 'F') DOWN else if (pipe == 'L') UP else this
             DOWN -> if (pipe == 'L') RIGHT else if (pipe == 'J') LEFT else this
             RIGHT -> if (pipe == 'J') UP else if (pipe == '7') DOWN else this
-        }
-    }
-}
-
-fun main() {
-    fun getDirection(p1: Point, p2: Point): Direction {
-        val diff = p1 - p2
-        return if (diff.x == -1) {
-            Direction.DOWN
-        } else if (diff.x == 1) {
-            Direction.UP
-        } else if (diff.y == -1) {
-            Direction.RIGHT
-        } else {
-            Direction.LEFT
         }
     }
 
