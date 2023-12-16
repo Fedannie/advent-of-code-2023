@@ -1,11 +1,5 @@
 fun main() {
-    fun String.hash(): Int {
-        var result = 0
-        for (ch in chars()) {
-            result = ((result + ch.toInt()) * 17) % 256
-        }
-        return result
-    }
+    fun String.hash(): Int = this.fold(0) { hash, ch -> ((hash + ch.code) * 17) % 256 }
 
     class State {
         val boxes = List<MutableList<Pair<String, Int>>>(256) { mutableListOf() }
@@ -23,7 +17,9 @@ fun main() {
         }
 
         fun power(): Int {
-            return boxes.mapIndexed { index, lenses -> (index + 1) * lenses.mapIndexed { lensInd, lens -> (1 + lensInd) * lens.second }.sum() }.sum()
+            return boxes.mapIndexed { index, lenses ->
+                (index + 1) * lenses.mapIndexed { lensInd, lens -> (1 + lensInd) * lens.second }.sum()
+            }.sum()
         }
 
         fun perform(operation: String): State {
@@ -35,8 +31,6 @@ fun main() {
             return this
         }
     }
-
-
 
     fun part1(input: List<String>): Int {
         return input[0].split(',').sumOf { it.hash() }
