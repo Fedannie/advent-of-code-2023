@@ -59,6 +59,15 @@ operator fun List<String>.get(coordinates: Point): Char {
     return this[coordinates.x][coordinates.y]
 }
 
+operator fun List<List<Int>>.get(coordinates: Point): Int {
+    return this[coordinates.x][coordinates.y]
+}
+
+fun List<List<Int>>.inRange(coordinates: Point): Boolean {
+    return coordinates.x in indices && coordinates.y in this[0].indices
+}
+
+
 enum class Direction(val delta: Point) {
     UP(Point(-1, 0)), LEFT(Point(0, -1)), DOWN(Point(1, 0)), RIGHT(Point(0, 1));
     val vertical
@@ -74,6 +83,24 @@ enum class Direction(val delta: Point) {
             RIGHT -> LEFT
             DOWN -> UP
         }
+
+    fun rotateRight(): Direction {
+        return when (this) {
+            UP -> RIGHT
+            LEFT -> UP
+            RIGHT -> DOWN
+            DOWN -> LEFT
+        }
+    }
+
+    fun rotateLeft(): Direction {
+        return when (this) {
+            UP -> LEFT
+            LEFT -> DOWN
+            RIGHT -> UP
+            DOWN -> RIGHT
+        }
+    }
 }
 
 fun getDirection(p1: Point, p2: Point): Direction {
