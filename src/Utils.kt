@@ -54,6 +54,7 @@ data class Point(val x: Int, val y: Int)
 operator fun Point.unaryMinus() = Point(-x, -y)
 operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
 operator fun Point.minus(other: Point) = Point(x - other.x, y - other.y)
+operator fun Point.times(n: Int): Point = Point(x * n, y * n)
 
 operator fun List<String>.get(coordinates: Point): Char {
     return this[coordinates.x][coordinates.y]
