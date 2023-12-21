@@ -68,6 +68,10 @@ fun List<List<Int>>.inRange(coordinates: Point): Boolean {
     return coordinates.x in indices && coordinates.y in this[0].indices
 }
 
+fun List<String>.fitsInRange(coordinates: Point): Boolean {
+    return coordinates.x in indices && coordinates.y in this[0].indices
+}
+
 
 enum class Direction(val delta: Point) {
     UP(Point(-1, 0)), LEFT(Point(0, -1)), DOWN(Point(1, 0)), RIGHT(Point(0, 1));
